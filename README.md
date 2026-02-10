@@ -51,7 +51,7 @@
 | Phase 5 | 生成與結果展示            | ✅ 完成 (UI) | GenerateSection：CTA 按鈕、狀態計時器、結果展示（目前為模擬生成） |
 | Phase 6 | 系統設定彈窗              | ✅ 完成      | SettingsModal：5 種 API 連線方式切換與配置                        |
 | Phase 7 | 整體打磨                  | ✅ 完成      | 暗色/亮色模式切換、微動畫、自訂捲軸樣式                           |
-| Phase 8 | API 串接                  | 🔲 待開發    | 串接 Gemini API / OpenAI / Azure OpenAI 真實 API                  |
+| Phase 8 | API 串接                  | 🚧 部分完成  | 實作 OpenAI (DALL-E 3) 與 Mock 服務；Gemini/Azure 暫用 Mock       |
 | Phase 9 | ChatGPT/Gemini 瀏覽器整合 | 🔲 待開發    | 透過瀏覽器擴充功能整合 ChatGPT / Gemini                           |
 
 ### 2.2 技術棧
@@ -95,7 +95,7 @@ src/
 ### 2.5 待辦事項（Next Steps）
 
 - [ ] 串接 Gemini API 真實影像生成
-- [ ] 串接 OpenAI Images API
+- [x] 串接 OpenAI Images API (DALL-E 3)
 - [ ] 串接 Azure OpenAI
 - [ ] 實作 ChatGPT 瀏覽器擴充功能整合
 - [ ] 實作 Gemini 瀏覽器整合
