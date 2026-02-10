@@ -468,5 +468,5 @@ src/
 - **圖示系統**：Lucide React
 - **狀態管理**：React Hooks（useState / useCallback）
 - **主題系統**：CSS Variables + ThemeProvider（dark / light / system）
-- **API 整合**：Client-Side API Call（待實作）
+- **API 整合**：Client-Side API Call（OpenAI / Azure / Gemini） + Browser Extension
 - **部署方式**：靜態網站（`npm run build` 產出）
