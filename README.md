@@ -3,17 +3,19 @@
 > **來源網址**：<https://learn.duotify.com/user/webapps/image-creator/>
 > **分析日期**：2026-02-10
 > **版本**：v0.1.5
+> **最後更新**：2026-02-11
 
 ## 目錄
 
 - [1. 概述](#1-概述)
-- [2. 頁頭與導覽區](#2-頁頭與導覽區)
-- [3. 提示詞與風格設定（Section 1）](#3-提示詞與風格設定section-1)
-- [4. 輸出設定（Section 2）](#4-輸出設定section-2)
-- [5. 開始生圖與結果展示（Section 3）](#5-開始生圖與結果展示section-3)
-- [6. 系統設定彈窗（Settings Modal）](#6-系統設定彈窗settings-modal)
-- [7. 頁尾資訊](#7-頁尾資訊)
-- [8. 功能總覽表](#8-功能總覽表)
+- [2. 開發進度](#2-開發進度)
+- [3. 頁頭與導覽區](#3-頁頭與導覽區)
+- [4. 提示詞與風格設定（Section 1）](#4-提示詞與風格設定section-1)
+- [5. 輸出設定（Section 2）](#5-輸出設定section-2)
+- [6. 開始生圖與結果展示（Section 3）](#6-開始生圖與結果展示section-3)
+- [7. 系統設定彈窗（Settings Modal）](#7-系統設定彈窗settings-modal)
+- [8. 頁尾資訊](#8-頁尾資訊)
+- [9. 功能總覽表](#9-功能總覽表)
 
 ---
 
@@ -34,7 +36,77 @@
 
 ---
 
-## 2. 頁頭與導覽區
+## 2. 開發進度
+
+> 最後更新時間：2026-02-11 01:25
+
+### 2.1 整體進度
+
+| 階段    | 內容                      | 狀態         | 說明                                                              |
+| ------- | ------------------------- | ------------ | ----------------------------------------------------------------- |
+| Phase 1 | 專案初始化                | ✅ 完成      | Vite + React + TypeScript + Tailwind v4 + shadcn/ui               |
+| Phase 2 | 頁頭與導覽區              | ✅ 完成      | HeroSection：標題、狀態列、快速操作、三步驟引導                   |
+| Phase 3 | 提示詞與風格設定          | ✅ 完成      | PromptSection：輸入框、12 個範本、參考圖上傳、8 類風格標籤        |
+| Phase 4 | 輸出設定                  | ✅ 完成      | OutputSection：比例、解析度、格式、壓縮品質、安全性過濾           |
+| Phase 5 | 生成與結果展示            | ✅ 完成 (UI) | GenerateSection：CTA 按鈕、狀態計時器、結果展示（目前為模擬生成） |
+| Phase 6 | 系統設定彈窗              | ✅ 完成      | SettingsModal：5 種 API 連線方式切換與配置                        |
+| Phase 7 | 整體打磨                  | ✅ 完成      | 暗色/亮色模式切換、微動畫、自訂捲軸樣式                           |
+| Phase 8 | API 串接                  | 🔲 待開發    | 串接 Gemini API / OpenAI / Azure OpenAI 真實 API                  |
+| Phase 9 | ChatGPT/Gemini 瀏覽器整合 | 🔲 待開發    | 透過瀏覽器擴充功能整合 ChatGPT / Gemini                           |
+
+### 2.2 技術棧
+
+| 分類      | 技術                 | 版本             |
+| --------- | -------------------- | ---------------- |
+| 建置工具  | Vite                 | 7.x              |
+| 前端框架  | React + TypeScript   | 19.x             |
+| CSS 框架  | Tailwind CSS         | v4               |
+| UI 元件庫 | shadcn/ui            | latest           |
+| 圖示      | Lucide React         | latest           |
+| 字型      | Inter + Noto Sans TC | Google Fonts CDN |
+
+### 2.3 專案結構
+
+```
+src/
+├── App.tsx                      # 主應用程式（整合所有區塊）
+├── main.tsx                     # 進入點
+├── index.css                    # Tailwind v4 + shadcn/ui CSS 架構
+├── components/
+│   ├── ui/                      # shadcn/ui 元件（17 個）
+│   ├── theme-provider.tsx       # 暗色模式 Provider
+│   ├── mode-toggle.tsx          # 主題切換按鈕
+│   ├── hero-section.tsx         # 頁頭區
+│   ├── prompt-section.tsx       # 提示詞與風格設定
+│   ├── output-section.tsx       # 輸出設定
+│   ├── generate-section.tsx     # 生成控制與結果展示
+│   ├── settings-modal.tsx       # 系統設定彈窗
+│   └── footer.tsx               # 頁尾
+└── lib/
+    ├── utils.ts                 # cn() 工具函式
+    ├── constants.ts             # 常數資料（範本、標籤、選項）
+    └── store.ts                 # 全域狀態管理 hooks
+```
+
+### 2.4 已安裝的 shadcn/ui 元件
+
+`button` · `card` · `dialog` · `select` · `label` · `textarea` · `badge` · `tabs` · `slider` · `separator` · `tooltip` · `dropdown-menu` · `scroll-area` · `input` · `toggle` · `toggle-group` · `switch`
+
+### 2.5 待辦事項（Next Steps）
+
+- [ ] 串接 Gemini API 真實影像生成
+- [ ] 串接 OpenAI Images API
+- [ ] 串接 Azure OpenAI
+- [ ] 實作 ChatGPT 瀏覽器擴充功能整合
+- [ ] 實作 Gemini 瀏覽器整合
+- [ ] 設定值持久化（localStorage）
+- [ ] 錯誤處理與重試機制
+- [ ] 生成歷史紀錄
+- [ ] 響應式設計精調（行動裝置）
+
+---
+
+## 3. 頁頭與導覽區
 
 ### 2.1 主標題區
 
@@ -64,7 +136,7 @@
 
 ---
 
-## 3. 提示詞與風格設定（Section 1）
+## 4. 提示詞與風格設定（Section 1）
 
 ### 3.1 提示詞輸入區
 
@@ -192,7 +264,7 @@
 
 ---
 
-## 4. 輸出設定（Section 2）
+## 5. 輸出設定（Section 2）
 
 ### 4.1 畫面比例
 
@@ -234,7 +306,7 @@
 
 ---
 
-## 5. 開始生圖與結果展示（Section 3）
+## 6. 開始生圖與結果展示（Section 3）
 
 ### 5.1 生成控制
 
@@ -257,7 +329,7 @@
 
 ---
 
-## 6. 系統設定彈窗（Settings Modal）
+## 7. 系統設定彈窗（Settings Modal）
 
 ### 6.1 連線方式切換
 
@@ -311,7 +383,7 @@
 
 ---
 
-## 7. 頁尾資訊
+## 8. 頁尾資訊
 
 | 項目         | 內容                    |
 | ------------ | ----------------------- |
@@ -321,7 +393,7 @@
 
 ---
 
-## 8. 功能總覽表
+## 9. 功能總覽表
 
 | 功能分類     | 功能項目          | 互動元素      | 關鍵 ID              |
 | ------------ | ----------------- | ------------- | -------------------- |
@@ -357,12 +429,23 @@
 
 ---
 
-## 附錄：技術架構推測
+## 附錄：技術架構
 
-根據頁面分析，推測技術架構如下：
+### 原始參考頁面推測
 
 - **前端**：純 HTML / CSS / JavaScript（無明顯前端框架痕跡）
 - **API 整合**：前端直接呼叫 OpenAI / Azure OpenAI / Gemini API（Client-Side API Call）
 - **瀏覽器擴充整合**：透過「ChatGPT 萬能工具箱」實現與 ChatGPT / Gemini 網頁介面的通訊
 - **無後端需求**：所有 API 呼叫均在客戶端完成，使用者需自行提供 API Key
 - **響應式設計**：介面具備行動裝置適配能力
+
+### 本專案實際技術棧
+
+- **前端框架**：React 19 + TypeScript（Vite 7 建置）
+- **CSS 框架**：Tailwind CSS v4（使用 `@tailwindcss/vite` 插件）
+- **UI 元件庫**：shadcn/ui（四步驟 CSS 架構 + 自動暗色模式）
+- **圖示系統**：Lucide React
+- **狀態管理**：React Hooks（useState / useCallback）
+- **主題系統**：CSS Variables + ThemeProvider（dark / light / system）
+- **API 整合**：Client-Side API Call（待實作）
+- **部署方式**：靜態網站（`npm run build` 產出）
