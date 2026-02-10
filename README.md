@@ -97,8 +97,8 @@ src/
 - [x] 串接 Gemini API 真實影像生成
 - [x] 串接 OpenAI Images API (DALL-E 3)
 - [x] 串接 Azure OpenAI
-- [ ] 實作 ChatGPT 瀏覽器擴充功能整合
-- [ ] 實作 Gemini 瀏覽器整合
+- [x] 實作 ChatGPT 瀏覽器擴充功能整合
+- [x] 實作 Gemini 瀏覽器整合
 - [ ] 設定值持久化（localStorage）
 - [ ] 錯誤處理與重試機制
 - [ ] 生成歷史紀錄
