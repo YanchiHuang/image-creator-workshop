@@ -13,6 +13,7 @@ interface PromptSectionProps {
     selectedStyles: string[]
     onToggleStyle: (value: string) => void
     onClearStyles: () => void
+    onRandomTemplate: () => void
     referenceImage: string | null
     onReferenceImageChange: (value: string | null) => void
     promptRef: React.RefObject<HTMLDivElement | null>
@@ -24,6 +25,7 @@ export function PromptSection({
     selectedStyles,
     onToggleStyle,
     onClearStyles,
+    onRandomTemplate,
     referenceImage,
     onReferenceImageChange,
     promptRef,
@@ -31,11 +33,7 @@ export function PromptSection({
     const [isDragOver, setIsDragOver] = useState(false)
     const fileInputRef = useRef<HTMLInputElement>(null)
 
-    // 填入範例提示詞
-    const handleFillExample = useCallback(() => {
-        const example = '一隻穿著雨衣的柯基在雨中跳舞，水彩繪本風格，暖色調光線，背景是模糊的城市街道和五彩雨傘。'
-        onPromptChange(example)
-    }, [onPromptChange])
+
 
     // 處理拖拽上傳
     const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -97,10 +95,10 @@ export function PromptSection({
                                 variant="ghost"
                                 size="sm"
                                 className="text-xs gap-1 text-muted-foreground hover:text-foreground"
-                                onClick={handleFillExample}
+                                onClick={onRandomTemplate}
                             >
                                 <Lightbulb className="w-3.5 h-3.5" />
-                                範例填入
+                                隨機範本
                             </Button>
                             <Button
                                 variant="ghost"

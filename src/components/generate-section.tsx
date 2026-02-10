@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react'
-import { Download, Maximize2, Rocket, Loader2, ImageIcon } from 'lucide-react'
+import { Download, Maximize2, Rocket, Loader2, ImageIcon, AlertCircle, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import type { GenerationState } from '@/lib/store'
@@ -198,8 +198,22 @@ export function GenerateSection({
                     )}
 
                     {generationState.status === 'error' && generationState.errorMessage && (
-                        <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
-                            {generationState.errorMessage}
+                        <div className="rounded-xl border border-destructive/50 bg-destructive/10 p-4 flex items-start gap-3 animate-in fade-in slide-in-from-bottom-2">
+                            <AlertCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
+                            <div className="space-y-3 flex-1">
+                                <p className="text-sm font-medium text-destructive">
+                                    {generationState.errorMessage}
+                                </p>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={onGenerate}
+                                    className="h-8 px-3 text-xs border-destructive/30 hover:bg-destructive/10 text-destructive hover:text-destructive active:scale-95 transition-all"
+                                >
+                                    <RefreshCw className="w-3.5 h-3.5 mr-1.5" />
+                                    重試
+                                </Button>
+                            </div>
                         </div>
                     )}
                 </div>

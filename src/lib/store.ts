@@ -63,6 +63,7 @@ const DEFAULT_OUTPUT_SETTINGS: OutputSettings = {
 const STORAGE_KEYS = {
     APP_SETTINGS: 'GPT_IMAGE_APP_SETTINGS_V1',
     OUTPUT_SETTINGS: 'GPT_IMAGE_OUTPUT_SETTINGS_V1',
+    HISTORY: 'GPT_IMAGE_HISTORY_V1',
 }
 
 function loadFromStorage<T>(key: string, defaultValue: T): T {
@@ -82,6 +83,55 @@ function saveToStorage<T>(key: string, value: T) {
     } catch (e) {
         console.warn(`Failed to save ${key} to storage`, e)
     }
+}
+
+// ===== 歷史紀錄介面 =====
+export interface HistoryItem {
+    id: string
+    timestamp: number
+    prompt: string
+    imageUrl: string | null
+    styleTags: string[]
+    aspectRatio: string
+    modelName: string
+}
+
+const MAX_HISTORY_ITEMS = 10
+
+// ===== 自訂 Hook =====
+
+export function useHistoryState() {
+    const [history, setHistory] = useState<HistoryItem[]>(() =>
+        loadFromStorage(STORAGE_KEYS.HISTORY, [])
+    )
+
+    const addToHistory = useCallback((item: Omit<HistoryItem, 'id' | 'timestamp'>) => {
+        setHistory(prev => {
+            const newItem: HistoryItem = {
+                ...item,
+                id: crypto.randomUUID(),
+                timestamp: Date.now(),
+            }
+            const next = [newItem, ...prev].slice(0, MAX_HISTORY_ITEMS)
+            saveToStorage(STORAGE_KEYS.HISTORY, next)
+            return next
+        })
+    }, [])
+
+    const clearHistory = useCallback(() => {
+        setHistory([])
+        saveToStorage(STORAGE_KEYS.HISTORY, [])
+    }, [])
+
+    const deleteHistoryItem = useCallback((id: string) => {
+        setHistory(prev => {
+            const next = prev.filter(item => item.id !== id)
+            saveToStorage(STORAGE_KEYS.HISTORY, next)
+            return next
+        })
+    }, [])
+
+    return { history, addToHistory, clearHistory, deleteHistoryItem }
 }
 
 // ===== 自訂 Hook =====
@@ -147,7 +197,7 @@ export function usePromptState() {
 
     return {
         prompt, setPrompt,
-        selectedStyles, toggleStyle, clearStyles,
+        selectedStyles, toggleStyle, clearStyles, setSelectedStyles,
         referenceImage, setReferenceImage,
         clearAll,
     }
