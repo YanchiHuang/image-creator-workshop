@@ -60,26 +60,63 @@ const DEFAULT_OUTPUT_SETTINGS: OutputSettings = {
     safetyLevel: 'medium',
 }
 
+const STORAGE_KEYS = {
+    APP_SETTINGS: 'GPT_IMAGE_APP_SETTINGS_V1',
+    OUTPUT_SETTINGS: 'GPT_IMAGE_OUTPUT_SETTINGS_V1',
+}
+
+function loadFromStorage<T>(key: string, defaultValue: T): T {
+    try {
+        const stored = localStorage.getItem(key)
+        if (!stored) return defaultValue
+        return { ...defaultValue, ...JSON.parse(stored) }
+    } catch (e) {
+        console.warn(`Failed to load ${key} from storage`, e)
+        return defaultValue
+    }
+}
+
+function saveToStorage<T>(key: string, value: T) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value))
+    } catch (e) {
+        console.warn(`Failed to save ${key} to storage`, e)
+    }
+}
+
 // ===== 自訂 Hook =====
 export function useAppSettings() {
-    const [settings, setSettings] = useState<AppSettings>(DEFAULT_APP_SETTINGS)
+    const [settings, setSettings] = useState<AppSettings>(() =>
+        loadFromStorage(STORAGE_KEYS.APP_SETTINGS, DEFAULT_APP_SETTINGS)
+    )
 
     const updateSettings = useCallback((partial: Partial<AppSettings>) => {
-        setSettings(prev => ({ ...prev, ...partial }))
+        setSettings(prev => {
+            const next = { ...prev, ...partial }
+            saveToStorage(STORAGE_KEYS.APP_SETTINGS, next)
+            return next
+        })
     }, [])
 
     return { settings, updateSettings }
 }
 
 export function useOutputSettings() {
-    const [settings, setSettings] = useState<OutputSettings>(DEFAULT_OUTPUT_SETTINGS)
+    const [settings, setSettings] = useState<OutputSettings>(() =>
+        loadFromStorage(STORAGE_KEYS.OUTPUT_SETTINGS, DEFAULT_OUTPUT_SETTINGS)
+    )
 
     const updateSettings = useCallback((partial: Partial<OutputSettings>) => {
-        setSettings(prev => ({ ...prev, ...partial }))
+        setSettings(prev => {
+            const next = { ...prev, ...partial }
+            saveToStorage(STORAGE_KEYS.OUTPUT_SETTINGS, next)
+            return next
+        })
     }, [])
 
     const resetSettings = useCallback(() => {
         setSettings(DEFAULT_OUTPUT_SETTINGS)
+        saveToStorage(STORAGE_KEYS.OUTPUT_SETTINGS, DEFAULT_OUTPUT_SETTINGS)
     }, [])
 
     return { settings, updateSettings, resetSettings }

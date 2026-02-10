@@ -99,7 +99,7 @@ src/
 - [x] 串接 Azure OpenAI
 - [x] 實作 ChatGPT 瀏覽器擴充功能整合
 - [x] 實作 Gemini 瀏覽器整合
-- [ ] 設定值持久化（localStorage）
+- [x] 設定值持久化（localStorage）
 - [ ] 錯誤處理與重試機制
 - [ ] 生成歷史紀錄
 - [ ] 響應式設計精調（行動裝置）
