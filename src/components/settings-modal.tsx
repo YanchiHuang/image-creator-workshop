@@ -7,13 +7,6 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { CONNECTION_OPTIONS } from '@/lib/constants'
@@ -116,46 +109,49 @@ export function SettingsModal({
                         </div>
                     )}
 
-                    {/* ===== Azure OpenAI 設定 ===== */}
                     {settings.connectionType === 'azure' && (
                         <div className="space-y-4">
                             <h3 className="text-sm font-semibold">Azure OpenAI 設定</h3>
                             <div className="space-y-3">
                                 <div className="space-y-1.5">
-                                    <Label htmlFor="azure-endpoint" className="text-xs">Endpoint URL</Label>
+                                    <Label htmlFor="azure-endpoint" className="text-xs">Resource Endpoint URL</Label>
                                     <Input
                                         id="azure-endpoint"
-                                        placeholder="https://{resource}.openai.azure.com/..."
+                                        placeholder="https://{resource}.openai.azure.com"
                                         value={settings.azureEndpoint}
                                         onChange={(e) => onUpdateSettings({ azureEndpoint: e.target.value })}
                                         className="rounded-lg border-border/50 bg-card/50"
                                     />
+                                    <p className="text-[10px] text-muted-foreground">Azure 資源的基礎網址</p>
+                                </div>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="azure-deployment" className="text-xs">Deployment Name</Label>
+                                        <Input
+                                            id="azure-deployment"
+                                            placeholder="dall-e-3"
+                                            value={settings.azureDeployment}
+                                            onChange={(e) => onUpdateSettings({ azureDeployment: e.target.value })}
+                                            className="rounded-lg border-border/50 bg-card/50"
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="azure-api-version" className="text-xs">API Version</Label>
+                                        <Input
+                                            id="azure-api-version"
+                                            placeholder="2024-02-01"
+                                            value={settings.azureApiVersion}
+                                            onChange={(e) => onUpdateSettings({ azureApiVersion: e.target.value })}
+                                            className="rounded-lg border-border/50 bg-card/50"
+                                        />
+                                    </div>
                                 </div>
                                 <div className="space-y-1.5">
-                                    <Label className="text-xs">驗證方式</Label>
-                                    <Select
-                                        value={settings.azureAuthMode}
-                                        onValueChange={(v) =>
-                                            onUpdateSettings({ azureAuthMode: v as 'apikey' | 'aad' })
-                                        }
-                                    >
-                                        <SelectTrigger className="rounded-lg border-border/50 bg-card/50">
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="apikey">API Key</SelectItem>
-                                            <SelectItem value="aad">AAD Token</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="space-y-1.5">
-                                    <Label htmlFor="azure-api-key" className="text-xs">
-                                        {settings.azureAuthMode === 'apikey' ? 'API Key' : 'AAD Token'}
-                                    </Label>
+                                    <Label htmlFor="azure-api-key" className="text-xs">API Key</Label>
                                     <Input
                                         id="azure-api-key"
                                         type="password"
-                                        placeholder={`請輸入你的 ${settings.azureAuthMode === 'apikey' ? 'API Key' : 'AAD Token'}`}
+                                        placeholder="請輸入你的 Azure API Key"
                                         value={settings.azureApiKey}
                                         onChange={(e) => onUpdateSettings({ azureApiKey: e.target.value })}
                                         className="rounded-lg border-border/50 bg-card/50"
@@ -240,6 +236,6 @@ export function SettingsModal({
                     )}
                 </div>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     )
 }

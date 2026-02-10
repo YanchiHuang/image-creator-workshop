@@ -11,7 +11,8 @@ export interface AppSettings {
     openaiApiKey: string
     // Azure OpenAI
     azureEndpoint: string
-    azureAuthMode: 'apikey' | 'aad'
+    azureDeployment: string
+    azureApiVersion: string
     azureApiKey: string
     // Gemini API
     geminiEndpoint: string
@@ -39,10 +40,11 @@ export interface GenerationState {
 const DEFAULT_APP_SETTINGS: AppSettings = {
     connectionType: 'gemini-api',
     openaiBaseUrl: 'https://api.openai.com/v1',
-    openaiModel: 'gpt-image-1.5',
+    openaiModel: 'dall-e-3',
     openaiApiKey: '',
     azureEndpoint: '',
-    azureAuthMode: 'apikey',
+    azureDeployment: 'dall-e-3',
+    azureApiVersion: '2024-02-01',
     azureApiKey: '',
     geminiEndpoint: 'https://generativelanguage.googleapis.com/v1beta',
     geminiModel: 'gemini-3-pro-image-preview',
