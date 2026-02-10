@@ -24,6 +24,31 @@ export class OpenAIImageService implements ImageGenerationService {
         // OpenAI DALL-E 3 支援: standard, hd
         const quality = outputSettings.resolution === 'high' ? 'hd' : 'standard'
 
+        const model = appSettings.openaiModel || 'dall-e-3'
+        const isDalle3 = model.includes('dall-e-3')
+
+        const body: {
+            model: string
+            prompt: string
+            n: number
+            size: string
+            quality?: string
+            style?: string
+        } = {
+            model,
+            prompt: fullPrompt,
+            n: 1,
+            size: size,
+        }
+
+        // DALL-E 3 專用參數
+        if (isDalle3) {
+            body.quality = quality
+            body.style = 'vivid' // vivid 或 natural
+        }
+
+        // 注意：不傳送 response_format，預設即為 'url'。避免部分非標準模型報錯 'Unknown parameter: response_format'
+
         try {
             const response = await fetch(`${appSettings.openaiBaseUrl}/images/generations`, {
                 method: 'POST',
@@ -31,15 +56,7 @@ export class OpenAIImageService implements ImageGenerationService {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${appSettings.openaiApiKey}`,
                 },
-                body: JSON.stringify({
-                    model: appSettings.openaiModel || 'dall-e-3',
-                    prompt: fullPrompt,
-                    n: 1,
-                    size: size,
-                    quality: quality,
-                    response_format: 'url', // 或 'b64_json'
-                    style: 'vivid', // DALL-E 3 專用參數: vivid 或 natural
-                }),
+                body: JSON.stringify(body),
             })
 
             if (!response.ok) {
