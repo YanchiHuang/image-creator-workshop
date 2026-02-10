@@ -6,6 +6,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
+import { ModeToggle } from '@/components/mode-toggle'
 import type { AppSettings } from '@/lib/store'
 
 interface HeroSectionProps {
@@ -46,8 +47,13 @@ export function HeroSection({
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full bg-primary/5 blur-3xl pointer-events-none" />
 
             <div className="relative max-w-5xl mx-auto px-4 pt-12 pb-8">
+                {/* 主題切換按鈕 */}
+                <div className="absolute top-4 right-4">
+                    <ModeToggle />
+                </div>
+
                 {/* 主標題區 */}
-                <div className="text-center mb-8">
+                <div className="text-center mb-8 animate-fade-in-up">
                     <h1 className="text-4xl md:text-5xl font-bold mb-3 tracking-tight">
                         <span className="bg-gradient-to-r from-primary via-blue-400 to-cyan-400 bg-clip-text text-transparent">
                             🎨 生圖工坊
