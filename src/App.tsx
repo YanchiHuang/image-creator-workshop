@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react'
+import { useRef, useState, useCallback, useMemo } from 'react'
 import { HeroSection } from '@/components/hero-section'
 import { PromptSection } from '@/components/prompt-section'
 import { OutputSection } from '@/components/output-section'
@@ -13,10 +13,15 @@ import {
   useGenerationState,
 } from '@/lib/store'
 import { PROMPT_TEMPLATES } from '@/lib/constants'
+import { ImageGenerator } from '@/lib/services/image-generator'
+import { APIError } from '@/lib/services/types'
 
 function App() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const promptRef = useRef<HTMLDivElement>(null)
+
+  // 初始化 API 服務
+  const imageGenerator = useMemo(() => new ImageGenerator(), [])
 
   // 全域狀態
   const { settings: appSettings, updateSettings: updateAppSettings } = useAppSettings()
@@ -46,35 +51,45 @@ function App() {
     scrollToPrompt()
   }, [setPrompt, scrollToPrompt])
 
-  // 模擬生成影像（示範用）
+  // 開始生成影像
   const handleGenerate = useCallback(async () => {
     if (!prompt.trim()) return
 
     startGeneration()
 
-    // 組合完整提示詞（加上風格標籤）
-    const fullPrompt = selectedStyles.length > 0
-      ? `${prompt}\n\nStyle: ${selectedStyles.join(', ')}`
-      : prompt
-
-    console.log('生成提示詞:', fullPrompt)
-    console.log('輸出設定:', outputSettings)
-    console.log('API 設定:', appSettings)
-
     try {
-      // 模擬 API 呼叫延遲
-      await new Promise(resolve => setTimeout(resolve, 3000))
+      const result = await imageGenerator.generate({
+        prompt,
+        styleTags: selectedStyles,
+        referenceImage,
+        appSettings,
+        outputSettings,
+      })
 
-      // 模擬成功 — 使用 placeholder 圖片
-      const width = outputSettings.aspectRatio === '1024x1536' ? 1024 : 1536
-      const height = outputSettings.aspectRatio === '1024x1536' ? 1536 : 1024
-      const placeholderUrl = `https://picsum.photos/${width}/${height}?random=${Date.now()}`
+      completeGeneration(result.url)
 
-      completeGeneration(placeholderUrl)
+      if (result.revisedPrompt) {
+        console.log('API 修飾後的提示詞:', result.revisedPrompt)
+      }
     } catch (err) {
-      failGeneration(err instanceof Error ? err.message : '未知錯誤')
+      console.error('生成失敗:', err)
+      const message = err instanceof APIError
+        ? `${err.message} (${err.code || 'UNKNOWN'})`
+        : err instanceof Error ? err.message : '未知錯誤'
+
+      failGeneration(message)
     }
-  }, [prompt, selectedStyles, outputSettings, appSettings, startGeneration, completeGeneration, failGeneration])
+  }, [
+    prompt,
+    selectedStyles,
+    referenceImage,
+    outputSettings,
+    appSettings,
+    startGeneration,
+    completeGeneration,
+    failGeneration,
+    imageGenerator
+  ])
 
   return (
     <div className="min-h-screen bg-background text-foreground">
