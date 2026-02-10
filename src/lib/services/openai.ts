@@ -72,8 +72,15 @@ export class OpenAIImageService implements ImageGenerationService {
             }
 
             const result = data.data[0]
+            let imageUrl = result.url
+
+            // 如果 API 回傳 b64_json (部分模型或設定預設)，則轉換為 Data URL
+            if (result.b64_json) {
+                imageUrl = `data:image/png;base64,${result.b64_json}`
+            }
+
             return {
-                url: result.url,
+                url: imageUrl,
                 revisedPrompt: result.revised_prompt,
             }
 
