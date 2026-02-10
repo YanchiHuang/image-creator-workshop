@@ -51,8 +51,8 @@
 | Phase 5 | 生成與結果展示            | ✅ 完成 (UI) | GenerateSection：CTA 按鈕、狀態計時器、結果展示（目前為模擬生成） |
 | Phase 6 | 系統設定彈窗              | ✅ 完成      | SettingsModal：5 種 API 連線方式切換與配置                        |
 | Phase 7 | 整體打磨                  | ✅ 完成      | 暗色/亮色模式切換、微動畫、自訂捲軸樣式                           |
-| Phase 8 | API 串接                  | 🚧 部分完成  | 實作 OpenAI (DALL-E 3) 與 Mock 服務；Gemini/Azure 暫用 Mock       |
-| Phase 9 | ChatGPT/Gemini 瀏覽器整合 | 🔲 待開發    | 透過瀏覽器擴充功能整合 ChatGPT / Gemini                           |
+| Phase 8 | API 串接                  | ✅ 完成      | 完整支援 OpenAI, Azure OpenAI, Gemini API                         |
+| Phase 9 | ChatGPT/Gemini 瀏覽器整合 | ✅ 完成      | 透過瀏覽器擴充功能整合 ChatGPT / Gemini                           |
 
 ### 2.2 技術棧
 
@@ -85,7 +85,14 @@ src/
 └── lib/
     ├── utils.ts                 # cn() 工具函式
     ├── constants.ts             # 常數資料（範本、標籤、選項）
-    └── store.ts                 # 全域狀態管理 hooks
+    ├── store.ts                 # 全域狀態管理 hooks (含 LocalStorage)
+    └── services/                # [NEW] 影像生成服務層
+        ├── types.ts             # 介面定義
+        ├── openai.ts            # OpenAI DALL-E 3
+        ├── azure.ts             # Azure OpenAI
+        ├── gemini.ts            # Google Gemini (Imagen 3)
+        ├── browser-extension.ts # 瀏覽器整合
+        └── image-generator.ts   # 工廠模式入口
 ```
 
 ### 2.4 已安裝的 shadcn/ui 元件
@@ -103,6 +110,20 @@ src/
 - [ ] 錯誤處理與重試機制
 - [ ] 生成歷史紀錄
 - [ ] 響應式設計精調（行動裝置）
+
+### 2.6 關鍵功能實作細節
+
+#### 2.6.1 API 串接策略 (Services)
+
+- 採用 **工廠模式 (Factory Pattern)** 管理不同 API 服務 (`ImageGenerator` -> Service)。
+- **OpenAI / Azure / Gemini**：皆支援原生的 Image Generation API。
+- **Browser Extension**：針對 ChatGPT 與 Gemini 網頁版，採用 **URL Hash 協議** (`autoSubmit=true&prompt=...`) 與瀏覽器擴充功能（如 ChatGPT 萬能工具箱）進行整合。
+
+#### 2.6.2 設定值持久化
+
+- 使用 `localStorage` 儲存使用者的 API Key 與偏好設定（如比例、解析度）。
+- 實作了 **版本控制** 與 **預設值合併** 機制，確保未來升級時的資料相容性。
+- 安全性提示：API Key 僅儲存於使用者瀏覽器端，不會傳送至任何中介伺服器。
 
 ---
 
