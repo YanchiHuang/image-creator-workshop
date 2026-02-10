@@ -47,7 +47,7 @@ const DEFAULT_APP_SETTINGS: AppSettings = {
     azureApiVersion: '2024-02-01',
     azureApiKey: '',
     geminiEndpoint: 'https://generativelanguage.googleapis.com/v1beta',
-    geminiModel: 'gemini-3-pro-image-preview',
+    geminiModel: 'imagen-3.0-generate-001',
     geminiApiKey: '',
     geminiBaseUrl: 'https://gemini.google.com/app',
 }

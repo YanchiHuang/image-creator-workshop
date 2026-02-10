@@ -1,19 +1,19 @@
 import { APIError, type GenerateOptions, type GenerateResult, type ImageGenerationService } from './types'
 import { OpenAIImageService } from './openai'
 import { AzureOpenAIImageService } from './azure'
+import { GeminiImageService } from './gemini'
 import { MockImageService } from './mock'
-
-// 預留其他實作
-// import { GeminiImageService } from './gemini'
 
 export class ImageGenerator implements ImageGenerationService {
     private openaiService: OpenAIImageService
     private azureService: AzureOpenAIImageService
+    private geminiService: GeminiImageService
     private mockService: MockImageService
 
     constructor() {
         this.openaiService = new OpenAIImageService()
         this.azureService = new AzureOpenAIImageService()
+        this.geminiService = new GeminiImageService()
         this.mockService = new MockImageService()
     }
 
@@ -30,9 +30,7 @@ export class ImageGenerator implements ImageGenerationService {
                 return this.azureService.generate(options)
 
             case 'gemini-api':
-                // 這些 API 尚未實作影像生成，暫時用 Mock
-                console.warn(`[ImageGenerator] ${connectionType} 尚未實作，使用 Mock 模式`)
-                return this.mockService.generate(options)
+                return this.geminiService.generate(options)
 
             case 'chatgpt':
             case 'gemini':
