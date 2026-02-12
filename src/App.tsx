@@ -1,12 +1,8 @@
-import { useRef, useState, useCallback, useMemo } from 'react'
-import { HeroSection } from '@/components/hero-section'
-import { PromptSection } from '@/components/prompt-section'
-import { OutputSection } from '@/components/output-section'
-import { GenerateSection } from '@/components/generate-section'
-import { HistorySection } from '@/components/history-section'
+import { useState, useCallback, useMemo } from 'react'
+import { HeaderBar } from '@/components/header-bar'
+import { ControlPanel } from '@/components/control-panel'
+import { ResultArea } from '@/components/result-area'
 import { SettingsModal } from '@/components/settings-modal'
-import { Footer } from '@/components/footer'
-import { Separator } from '@/components/ui/separator'
 import {
   useAppSettings,
   useOutputSettings,
@@ -16,23 +12,33 @@ import {
   type HistoryItem,
 } from '@/lib/store'
 import { PROMPT_TEMPLATES } from '@/lib/constants'
+import type { ConnectionType } from '@/lib/constants'
 import { ImageGenerator } from '@/lib/services/image-generator'
 import { APIError } from '@/lib/services/types'
 
 function App() {
   const [settingsOpen, setSettingsOpen] = useState(false)
-  const promptRef = useRef<HTMLDivElement>(null)
 
   // 初始化 API 服務
   const imageGenerator = useMemo(() => new ImageGenerator(), [])
 
   // 全域狀態
-  const { settings: appSettings, updateSettings: updateAppSettings } = useAppSettings()
-  const { settings: outputSettings, updateSettings: updateOutputSettings, resetSettings: resetOutputSettings } = useOutputSettings()
+  const { settings: appSettings, updateSettings: updateAppSettings } =
+    useAppSettings()
   const {
-    prompt, setPrompt,
-    selectedStyles, toggleStyle, clearStyles, setSelectedStyles,
-    referenceImage, setReferenceImage,
+    settings: outputSettings,
+    updateSettings: updateOutputSettings,
+    resetSettings: resetOutputSettings,
+  } = useOutputSettings()
+  const {
+    prompt,
+    setPrompt,
+    selectedStyles,
+    toggleStyle,
+    clearStyles,
+    setSelectedStyles,
+    referenceImage,
+    setReferenceImage,
   } = usePromptState()
   const {
     state: generationState,
@@ -42,39 +48,34 @@ function App() {
     updateElapsedTime,
   } = useGenerationState()
 
-  // 歷史紀錄狀態
-  const {
-    history,
-    addToHistory,
-    clearHistory,
-    deleteHistoryItem
-  } = useHistoryState()
+  // 歷史紀錄
+  const { history, addToHistory, clearHistory, deleteHistoryItem } =
+    useHistoryState()
 
-  // 捲動至提示詞區
-  const scrollToPrompt = useCallback(() => {
-    promptRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }, [])
-
-  // 隨機填入範本
+  // 隨機範本
   const handleRandomTemplate = useCallback(() => {
     const randomIndex = Math.floor(Math.random() * PROMPT_TEMPLATES.length)
     setPrompt(PROMPT_TEMPLATES[randomIndex].prompt)
-    scrollToPrompt()
-  }, [setPrompt, scrollToPrompt])
+  }, [setPrompt])
+
+  // 切換 Provider
+  const handleChangeProvider = useCallback(
+    (provider: ConnectionType) => {
+      updateAppSettings({ connectionType: provider })
+    },
+    [updateAppSettings]
+  )
 
   // 還原歷史紀錄
-  const handleRestoreHistory = useCallback((item: HistoryItem) => {
-    setPrompt(item.prompt)
-    clearStyles() // Clear existing styles
-    setSelectedStyles(item.styleTags) // Set new styles
-
-    // 更新 output settings
-    updateOutputSettings({
-      aspectRatio: item.aspectRatio,
-    })
-
-    scrollToPrompt()
-  }, [setPrompt, clearStyles, setSelectedStyles, updateOutputSettings, scrollToPrompt])
+  const handleRestoreHistory = useCallback(
+    (item: HistoryItem) => {
+      setPrompt(item.prompt)
+      clearStyles()
+      setSelectedStyles(item.styleTags)
+      updateOutputSettings({ aspectRatio: item.aspectRatio })
+    },
+    [setPrompt, clearStyles, setSelectedStyles, updateOutputSettings]
+  )
 
   // 開始生成影像
   const handleGenerate = useCallback(async () => {
@@ -99,7 +100,7 @@ function App() {
         imageUrl: result.url,
         styleTags: selectedStyles,
         aspectRatio: outputSettings.aspectRatio,
-        modelName: appSettings.connectionType, // 或更詳細的模型名
+        modelName: appSettings.connectionType,
       })
 
       if (result.revisedPrompt) {
@@ -107,9 +108,12 @@ function App() {
       }
     } catch (err) {
       console.error('生成失敗:', err)
-      const message = err instanceof APIError
-        ? `${err.message} (${err.code || 'UNKNOWN'})`
-        : err instanceof Error ? err.message : '未知錯誤'
+      const message =
+        err instanceof APIError
+          ? `${err.message} (${err.code || 'UNKNOWN'})`
+          : err instanceof Error
+            ? err.message
+            : '未知錯誤'
 
       failGeneration(message)
     }
@@ -123,84 +127,46 @@ function App() {
     completeGeneration,
     failGeneration,
     imageGenerator,
-    addToHistory
+    addToHistory,
   ])
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* 背景紋理 */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.015]">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)',
-          backgroundSize: '40px 40px',
-        }} />
-      </div>
+    <div className="workstation-layout bg-background text-foreground">
+      {/* ===== Header（系統環境層） ===== */}
+      <HeaderBar
+        settings={appSettings}
+        onOpenSettings={() => setSettingsOpen(true)}
+        onChangeProvider={handleChangeProvider}
+      />
 
-      <div className="relative">
-        <HeroSection
-          settings={appSettings}
-          onOpenSettings={() => setSettingsOpen(true)}
-          onScrollToPrompt={scrollToPrompt}
+      {/* ===== 雙欄主體 ===== */}
+      <div className="workstation-main">
+        {/* 左側：Control Panel（30%） */}
+        <ControlPanel
+          prompt={prompt}
+          onPromptChange={setPrompt}
           onRandomTemplate={handleRandomTemplate}
+          selectedStyles={selectedStyles}
+          onToggleStyle={toggleStyle}
+          onClearStyles={clearStyles}
+          referenceImage={referenceImage}
+          onReferenceImageChange={setReferenceImage}
+          outputSettings={outputSettings}
+          onUpdateOutputSettings={updateOutputSettings}
+          onResetOutputSettings={resetOutputSettings}
         />
 
-        <div className="max-w-5xl mx-auto px-4">
-          <Separator className="opacity-10" />
-        </div>
-
-        <div ref={promptRef}>
-          <PromptSection
-            prompt={prompt}
-            onPromptChange={setPrompt}
-            selectedStyles={selectedStyles}
-            onToggleStyle={toggleStyle}
-            onClearStyles={clearStyles}
-            onRandomTemplate={handleRandomTemplate}
-            referenceImage={referenceImage}
-            onReferenceImageChange={setReferenceImage}
-            promptRef={promptRef}
-          />
-        </div>
-
-        <div className="max-w-5xl mx-auto px-4">
-          <Separator className="opacity-10" />
-        </div>
-
-        <OutputSection
-          settings={outputSettings}
-          onUpdateSettings={updateOutputSettings}
-          onResetSettings={resetOutputSettings}
-        />
-
-        <div className="max-w-5xl mx-auto px-4">
-          <Separator className="opacity-10" />
-        </div>
-
-        {/* 開始生圖與結果展示 */}
-        <GenerateSection
+        {/* 右側：Result / Preview Area（70%） */}
+        <ResultArea
           generationState={generationState}
           prompt={prompt}
           onGenerate={handleGenerate}
           onUpdateElapsedTime={updateElapsedTime}
+          history={history}
+          onDeleteHistoryItem={deleteHistoryItem}
+          onClearHistory={clearHistory}
+          onRestoreHistory={handleRestoreHistory}
         />
-
-        {/* 歷史紀錄區塊 */}
-        {history.length > 0 && (
-          <>
-            <div className="max-w-5xl mx-auto px-4">
-              <Separator className="opacity-10" />
-            </div>
-            <HistorySection
-              history={history}
-              onDelete={deleteHistoryItem}
-              onClear={clearHistory}
-              onRestore={handleRestoreHistory}
-            />
-          </>
-        )}
-
-        {/* 頁尾 */}
-        <Footer />
       </div>
 
       {/* 系統設定彈窗 */}

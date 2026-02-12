@@ -2,50 +2,56 @@
 @import "tw-animate-css";
 
 /*
-  Tailwind v4 + shadcn/ui 暗色模式模式
-  四步驟架構：
-  1. 在根層級定義 CSS 變數（不在 @layer base 中）
-  2. 使用 .dark 覆寫暗色模式（不在 @theme 中）
-  3. 使用 @theme inline 對映到 Tailwind 工具類
-  4. 所有色彩值必須使用 hsl() 包裹
+  Tailwind v4 + shadcn/ui 專業暗色工作站模式
+  依據 plan.md 規劃：
+  - 深色低對比背景
+  - 讓顏色集中在生成結果與 CTA
+  - 像 IDE / 剪輯軟體 / 設計工具
 */
 
 /* 亮色模式色彩 */
 :root {
-  --background: hsl(0 0% 100%);
-  --foreground: hsl(222.2 84% 4.9%);
+  --background: hsl(220 14% 96%);
+  --foreground: hsl(224 71% 4%);
   --card: hsl(0 0% 100%);
-  --card-foreground: hsl(222.2 84% 4.9%);
+  --card-foreground: hsl(224 71% 4%);
   --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(222.2 84% 4.9%);
-  --primary: hsl(221.2 83.2% 53.3%);
-  --primary-foreground: hsl(210 40% 98%);
-  --secondary: hsl(210 40% 96.1%);
-  --secondary-foreground: hsl(222.2 47.4% 11.2%);
-  --muted: hsl(210 40% 96.1%);
-  --muted-foreground: hsl(215.4 16.3% 46.9%);
-  --accent: hsl(210 40% 96.1%);
-  --accent-foreground: hsl(222.2 47.4% 11.2%);
-  --destructive: hsl(0 84.2% 60.2%);
-  --destructive-foreground: hsl(210 40% 98%);
-  --success: hsl(142.1 76.2% 36.3%);
-  --success-foreground: hsl(210 40% 98%);
+  --popover-foreground: hsl(224 71% 4%);
+  --primary: hsl(239 84% 67%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(220 14% 92%);
+  --secondary-foreground: hsl(224 71% 4%);
+  --muted: hsl(220 14% 92%);
+  --muted-foreground: hsl(220 9% 46%);
+  --accent: hsl(220 14% 92%);
+  --accent-foreground: hsl(224 71% 4%);
+  --destructive: hsl(0 84% 60%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --success: hsl(142 71% 45%);
+  --success-foreground: hsl(0 0% 100%);
   --warning: hsl(38 92% 50%);
-  --warning-foreground: hsl(222.2 47.4% 11.2%);
-  --info: hsl(221.2 83.2% 53.3%);
-  --info-foreground: hsl(210 40% 98%);
-  --border: hsl(214.3 31.8% 91.4%);
-  --input: hsl(214.3 31.8% 91.4%);
-  --ring: hsl(221.2 83.2% 53.3%);
-  --radius: 0.625rem;
+  --warning-foreground: hsl(224 71% 4%);
+  --info: hsl(221 83% 53%);
+  --info-foreground: hsl(0 0% 100%);
+  --border: hsl(220 13% 87%);
+  --input: hsl(220 13% 87%);
+  --ring: hsl(239 84% 67%);
+  --radius: 0.5rem;
+
+  /* 面板專用 */
+  --panel: hsl(0 0% 100%);
+  --panel-foreground: hsl(224 71% 4%);
+  --panel-border: hsl(220 13% 91%);
+
+  /* Sidebar 用 */
   --sidebar-background: hsl(0 0% 98%);
-  --sidebar-foreground: hsl(240 5.3% 26.1%);
-  --sidebar-primary: hsl(240 5.9% 10%);
+  --sidebar-foreground: hsl(240 5% 26%);
+  --sidebar-primary: hsl(240 6% 10%);
   --sidebar-primary-foreground: hsl(0 0% 98%);
-  --sidebar-accent: hsl(240 4.8% 95.9%);
-  --sidebar-accent-foreground: hsl(240 5.9% 10%);
+  --sidebar-accent: hsl(240 5% 96%);
+  --sidebar-accent-foreground: hsl(240 6% 10%);
   --sidebar-border: hsl(220 13% 91%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  --sidebar-ring: hsl(217 91% 60%);
 
   /* 圖表色彩 */
   --chart-1: hsl(12 76% 61%);
@@ -55,41 +61,48 @@
   --chart-5: hsl(27 87% 67%);
 }
 
-/* 暗色模式色彩覆寫 */
+/* 暗色模式 - plan.md 建議的專業深色  */
 .dark {
-  --background: hsl(222.2 84% 4.9%);
+  --background: hsl(222 47% 7%);
   --foreground: hsl(210 40% 98%);
-  --card: hsl(222.2 84% 4.9%);
+  --card: hsl(223 47% 10%);
   --card-foreground: hsl(210 40% 98%);
-  --popover: hsl(222.2 84% 4.9%);
+  --popover: hsl(223 47% 10%);
   --popover-foreground: hsl(210 40% 98%);
-  --primary: hsl(217.2 91.2% 59.8%);
-  --primary-foreground: hsl(222.2 47.4% 11.2%);
-  --secondary: hsl(217.2 32.6% 17.5%);
+  --primary: hsl(239 84% 67%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(215 28% 17%);
   --secondary-foreground: hsl(210 40% 98%);
-  --muted: hsl(217.2 32.6% 17.5%);
-  --muted-foreground: hsl(215 20.2% 65.1%);
-  --accent: hsl(217.2 32.6% 17.5%);
+  --muted: hsl(215 28% 17%);
+  --muted-foreground: hsl(217 19% 62%);
+  --accent: hsl(215 28% 17%);
   --accent-foreground: hsl(210 40% 98%);
-  --destructive: hsl(0 62.8% 30.6%);
+  --destructive: hsl(0 63% 31%);
   --destructive-foreground: hsl(210 40% 98%);
-  --success: hsl(142.1 70.6% 45.3%);
-  --success-foreground: hsl(222.2 47.4% 11.2%);
+  --success: hsl(142 71% 45%);
+  --success-foreground: hsl(0 0% 100%);
   --warning: hsl(38 92% 55%);
-  --warning-foreground: hsl(222.2 47.4% 11.2%);
-  --info: hsl(217.2 91.2% 59.8%);
-  --info-foreground: hsl(222.2 47.4% 11.2%);
-  --border: hsl(217.2 32.6% 17.5%);
-  --input: hsl(217.2 32.6% 17.5%);
-  --ring: hsl(224.3 76.3% 48%);
-  --sidebar-background: hsl(240 5.9% 10%);
-  --sidebar-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-primary: hsl(224.3 76.3% 48%);
-  --sidebar-primary-foreground: hsl(0 0% 98%);
-  --sidebar-accent: hsl(240 3.7% 15.9%);
-  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-border: hsl(240 3.7% 15.9%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  --warning-foreground: hsl(224 71% 4%);
+  --info: hsl(217 91% 60%);
+  --info-foreground: hsl(0 0% 100%);
+  --border: hsl(215 28% 17%);
+  --input: hsl(215 28% 17%);
+  --ring: hsl(239 84% 67%);
+
+  /* 面板專用 - 深色面板 */
+  --panel: hsl(220 33% 11%);
+  --panel-foreground: hsl(210 40% 98%);
+  --panel-border: hsl(215 20% 20%);
+
+  /* Sidebar */
+  --sidebar-background: hsl(223 47% 10%);
+  --sidebar-foreground: hsl(210 40% 98%);
+  --sidebar-primary: hsl(239 84% 67%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(215 28% 17%);
+  --sidebar-accent-foreground: hsl(210 40% 98%);
+  --sidebar-border: hsl(215 28% 17%);
+  --sidebar-ring: hsl(239 84% 67%);
 
   /* 暗色模式圖表色彩 */
   --chart-1: hsl(220 70% 50%);
@@ -99,7 +112,7 @@
   --chart-5: hsl(340 75% 55%);
 }
 
-/* 將 CSS 變數對映至 Tailwind 工具類 */
+/* Tailwind 對映 */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -140,6 +153,11 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  /* 面板 Token */
+  --color-panel: var(--panel);
+  --color-panel-foreground: var(--panel-foreground);
+  --color-panel-border: var(--panel-border);
+
   /* 圓角 Token */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -152,6 +170,10 @@
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Noto Sans TC",
     sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
     "Noto Color Emoji";
+
+  --font-mono:
+    "JetBrains Mono", "SF Mono", ui-monospace, "Cascadia Code",
+    "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
 }
 
 /* 基礎樣式 */
@@ -171,14 +193,97 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
   }
 }
 
-/* 自訂微動畫 */
+/* ===== 工作站佈局 ===== */
+.workstation-layout {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.workstation-main {
+  display: grid;
+  grid-template-columns: minmax(320px, 30%) 1fr;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* 控制面板 */
+.control-panel {
+  overflow-y: auto;
+  border-right: 1px solid var(--panel-border);
+  background: var(--panel);
+}
+
+/* 結果區域 */
+.result-area {
+  overflow-y: auto;
+  background: var(--background);
+}
+
+/* ===== 響應式：行動裝置改為上下堆疊 ===== */
+@media (max-width: 768px) {
+  .workstation-main {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .control-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--panel-border);
+    max-height: 50vh;
+  }
+
+  body {
+    overflow: auto;
+  }
+
+  .workstation-layout {
+    height: auto;
+    min-height: 100vh;
+  }
+}
+
+/* ===== Collapsible 動畫 ===== */
+[data-state="open"] > .collapsible-content {
+  animation: collapsible-open 200ms ease-out;
+}
+
+[data-state="closed"] > .collapsible-content {
+  animation: collapsible-close 200ms ease-out;
+}
+
+@keyframes collapsible-open {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes collapsible-close {
+  from {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+/* ===== 自訂微動畫 ===== */
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -186,13 +291,13 @@
   }
 }
 
-@keyframes float {
+@keyframes pulse-dot {
   0%,
   100% {
-    transform: translateY(0);
+    opacity: 1;
   }
   50% {
-    transform: translateY(-6px);
+    opacity: 0.4;
   }
 }
 
@@ -205,12 +310,21 @@
   }
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 0.5s ease-out both;
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.animate-float {
-  animation: float 3s ease-in-out infinite;
+.animate-fade-in-up {
+  animation: fade-in-up 0.3s ease-out both;
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
 }
 
 .animate-shimmer {
@@ -218,21 +332,25 @@
   animation: shimmer 2s linear infinite;
 }
 
-/* 交錯動畫延遲 */
-.stagger-1 {
-  animation-delay: 0.1s;
-}
-.stagger-2 {
-  animation-delay: 0.2s;
-}
-.stagger-3 {
-  animation-delay: 0.3s;
-}
-.stagger-4 {
-  animation-delay: 0.4s;
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
 }
 
-/* 自訂捲軸樣式 */
+/* 交錯動畫延遲 */
+.stagger-1 {
+  animation-delay: 0.05s;
+}
+.stagger-2 {
+  animation-delay: 0.1s;
+}
+.stagger-3 {
+  animation-delay: 0.15s;
+}
+.stagger-4 {
+  animation-delay: 0.2s;
+}
+
+/* ===== 自訂捲軸樣式 ===== */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -245,9 +363,15 @@
 ::-webkit-scrollbar-thumb {
   background: var(--muted-foreground);
   border-radius: 3px;
-  opacity: 0.3;
+  opacity: 0.2;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  opacity: 0.5;
+  opacity: 0.4;
+}
+
+/* ===== 拖曳區域強調 ===== */
+.drop-zone-active {
+  border-color: var(--primary) !important;
+  background: hsl(from var(--primary) h s l / 0.08) !important;
 }
