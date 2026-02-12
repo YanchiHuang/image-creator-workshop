@@ -69,7 +69,7 @@ export function HeaderBar({
                 <div className="flex items-center gap-2">
                     <span className="text-lg">🎨</span>
                     <h1 className="text-sm font-bold tracking-tight text-foreground">
-                        生圖工坊
+                        映像製作所
                     </h1>
                 </div>
                 <span className="text-[10px] font-mono text-muted-foreground/60 px-1.5 py-0.5 rounded border border-border/50">

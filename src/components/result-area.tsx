@@ -363,7 +363,7 @@ export function ResultArea({
 
             {/* ===== 底部狀態列 ===== */}
             <div className="flex items-center justify-between px-4 py-1.5 border-t border-border/30 bg-panel/20 text-[10px] text-muted-foreground/40 shrink-0">
-                <span>© 2026 生圖工坊 · 由 Claude / Gemini 設計開發</span>
+                <span>© 2026 映像製作所 · 由 Claude / Gemini 設計開發</span>
                 <span className="font-mono">v0.2.0</span>
             </div>
         </main>

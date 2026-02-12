@@ -6,7 +6,7 @@ export function Footer() {
             <Separator className="opacity-20 mb-8" />
             <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground/60">
                 <div className="flex items-center gap-2">
-                    <span>© 2026 生圖工坊</span>
+                    <span>© 2026 映像製作所</span>
                     <span className="hidden md:inline">·</span>
                     <span className="hidden md:inline">由 Claude / Gemini 設計開發</span>
                 </div>

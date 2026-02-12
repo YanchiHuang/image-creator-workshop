@@ -1,8 +1,8 @@
-# 生圖工坊 (Image Creator Workshop)
+# 映像製作所 (Image Creator Workshop)
 
 ![Version](https://img.shields.io/badge/version-0.1.5-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![React](https://img.shields.io/badge/React-19-61dafb) ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178c6) ![Vite](https://img.shields.io/badge/Vite-7.0-646cff) ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4-38bdf8)
 
-**生圖工坊**是一個專業、穩定且可控的 Web AI 影像生成工作台。透過整合 OpenAI、Azure OpenAI 與 Google Gemini 等多種最強大的 AI 模型，讓使用者能透過自然語言描述與豐富的風格標籤，輕鬆創作出高品質的影像作品。
+**映像製作所**是一個專業、穩定且可控的 Web AI 影像生成工作台。透過整合 OpenAI、Azure OpenAI 與 Google Gemini 等多種最強大的 AI 模型，讓使用者能透過自然語言描述與豐富的風格標籤，輕鬆創作出高品質的影像作品。
 
 ![Project Preview](./public/preview.png)
 _(若有專案截圖可放置於此)_
@@ -123,4 +123,4 @@ src/
 
 ## 📄 版權聲明
 
-© 2026 生圖工坊 (Image Creator Workshop). Built by Claude & Gemini.
+© 2026 映像製作所 (Image Creator Workshop). Built by Claude & Gemini.

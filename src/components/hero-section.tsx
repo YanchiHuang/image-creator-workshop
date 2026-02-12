@@ -56,7 +56,7 @@ export function HeroSection({
                 <div className="text-center mb-8 animate-fade-in-up">
                     <h1 className="text-4xl md:text-5xl font-bold mb-3 tracking-tight">
                         <span className="bg-gradient-to-r from-primary via-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                            🎨 生圖工坊
+                            🎨 映像製作所
                         </span>
                     </h1>
                     <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto">
