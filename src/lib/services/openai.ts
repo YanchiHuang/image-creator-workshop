@@ -24,7 +24,7 @@ export class OpenAIImageService implements ImageGenerationService {
         // OpenAI DALL-E 3 支援: standard, hd
         const quality = outputSettings.resolution === 'high' ? 'hd' : 'standard'
 
-        const model = appSettings.openaiModel || 'dall-e-3'
+        const model = appSettings.openaiModel || 'gpt-image-1.5'
         const isDalle3 = model.includes('dall-e-3')
 
         const body: {
