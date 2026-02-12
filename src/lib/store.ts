@@ -70,7 +70,12 @@ function loadFromStorage<T>(key: string, defaultValue: T): T {
     try {
         const stored = localStorage.getItem(key)
         if (!stored) return defaultValue
-        return { ...defaultValue, ...JSON.parse(stored) }
+        const parsed = JSON.parse(stored)
+        // 若 defaultValue 是陣列，直接回傳解析結果（需確認也是陣列）
+        if (Array.isArray(defaultValue)) {
+            return (Array.isArray(parsed) ? parsed : defaultValue) as T
+        }
+        return { ...defaultValue, ...parsed }
     } catch (e) {
         console.warn(`Failed to load ${key} from storage`, e)
         return defaultValue
