@@ -63,16 +63,17 @@ export function HeaderBar({
     const status = getConnectionStatus()
 
     return (
-        <header className="flex items-center justify-between h-12 px-4 border-b border-panel-border bg-panel select-none shrink-0">
-            {/* 左側：Logo / 產品名稱 */}
+        <header className="flex items-center justify-between h-14 px-6 border-b border-panel-border bg-background select-none shrink-0">
+            {/* 左側：Anthropic 風 spike-mark + 襯線 wordmark */}
             <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2">
-                    <span className="text-lg">🎨</span>
-                    <h1 className="text-sm font-bold tracking-tight text-foreground">
+                <div className="flex items-center gap-2.5">
+                    {/* 4-spoke radial spike — DESIGN.md 規範的品牌 wordmark 前綴 */}
+                    <span className="spike-mark text-foreground" aria-hidden="true" />
+                    <h1 className="font-display text-[18px] leading-none tracking-tight text-foreground">
                         映像製作所
                     </h1>
                 </div>
-                <span className="text-[10px] font-mono text-muted-foreground/60 px-1.5 py-0.5 rounded border border-border/50">
+                <span className="text-[10px] font-mono uppercase tracking-[0.12em] text-muted-foreground px-2 py-0.5 rounded-full border border-border">
                     v0.2.0
                 </span>
             </div>

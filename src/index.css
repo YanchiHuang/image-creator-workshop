@@ -2,117 +2,143 @@
 @import "tw-animate-css";
 
 /*
-  Tailwind v4 + shadcn/ui 專業暗色工作站模式
-  依據 plan.md 規劃：
-  - 深色低對比背景
-  - 讓顏色集中在生成結果與 CTA
-  - 像 IDE / 剪輯軟體 / 設計工具
+  Tailwind v4 + shadcn/ui — 依 DESIGN.md 重構
+  Anthropic Claude.com 編輯式視覺語言：
+  - 暖奶油畫布 (cream canvas)
+  - 珊瑚色主 CTA (coral primary)
+  - 深海軍藍產品介面 (dark navy product surface)
+  - Copernicus 襯線標題 + StyreneB / Inter 無襯線內文
 */
 
-/* 亮色模式色彩 */
+/* ===== 亮色模式：cream canvas（預設） ===== */
 :root {
-  --background: hsl(220 14% 96%);
-  --foreground: hsl(224 71% 4%);
-  --card: hsl(0 0% 100%);
-  --card-foreground: hsl(224 71% 4%);
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(224 71% 4%);
-  --primary: hsl(239 84% 67%);
+  /* 對映 DESIGN.md：背景使用 canvas (#faf9f5)、文字使用 ink (#141413) */
+  --background: hsl(48 36% 97%);            /* canvas */
+  --foreground: hsl(60 4% 8%);              /* ink */
+
+  /* 卡片背景使用 surface-card (#efe9de) — 比 canvas 深一階 */
+  --card: hsl(40 28% 90%);
+  --card-foreground: hsl(60 4% 8%);
+
+  --popover: hsl(48 36% 97%);
+  --popover-foreground: hsl(60 4% 8%);
+
+  /* 主色：珊瑚 coral (#cc785c) */
+  --primary: hsl(15 53% 58%);
   --primary-foreground: hsl(0 0% 100%);
-  --secondary: hsl(220 14% 92%);
-  --secondary-foreground: hsl(224 71% 4%);
-  --muted: hsl(220 14% 92%);
-  --muted-foreground: hsl(220 9% 46%);
-  --accent: hsl(220 14% 92%);
-  --accent-foreground: hsl(224 71% 4%);
-  --destructive: hsl(0 84% 60%);
+
+  /* 次要色 / 強調色：較深 cream */
+  --secondary: hsl(40 28% 90%);
+  --secondary-foreground: hsl(60 4% 8%);
+
+  --muted: hsl(40 28% 90%);
+  --muted-foreground: hsl(45 5% 42%);       /* muted (#6c6a64) */
+
+  --accent: hsl(38 25% 86%);                /* surface-cream-strong */
+  --accent-foreground: hsl(60 4% 8%);
+
+  --destructive: hsl(0 53% 53%);            /* error (#c64545) */
   --destructive-foreground: hsl(0 0% 100%);
-  --success: hsl(142 71% 45%);
+  --success: hsl(135 39% 55%);              /* success (#5db872) */
   --success-foreground: hsl(0 0% 100%);
-  --warning: hsl(38 92% 50%);
-  --warning-foreground: hsl(224 71% 4%);
-  --info: hsl(221 83% 53%);
+  --warning: hsl(45 86% 46%);               /* warning (#d4a017) */
+  --warning-foreground: hsl(60 4% 8%);
+  --info: hsl(168 35% 55%);                 /* accent-teal */
   --info-foreground: hsl(0 0% 100%);
-  --border: hsl(220 13% 87%);
-  --input: hsl(220 13% 87%);
-  --ring: hsl(239 84% 67%);
-  --radius: 0.5rem;
 
-  /* 面板專用 */
-  --panel: hsl(0 0% 100%);
-  --panel-foreground: hsl(224 71% 4%);
-  --panel-border: hsl(220 13% 91%);
+  --border: hsl(38 25% 88%);                /* hairline (#e6dfd8) */
+  --input: hsl(38 25% 88%);
+  --ring: hsl(15 53% 58%);                  /* coral focus ring */
 
-  /* Sidebar 用 */
-  --sidebar-background: hsl(0 0% 98%);
-  --sidebar-foreground: hsl(240 5% 26%);
-  --sidebar-primary: hsl(240 6% 10%);
-  --sidebar-primary-foreground: hsl(0 0% 98%);
-  --sidebar-accent: hsl(240 5% 96%);
-  --sidebar-accent-foreground: hsl(240 6% 10%);
-  --sidebar-border: hsl(220 13% 91%);
-  --sidebar-ring: hsl(217 91% 60%);
+  --radius: 0.75rem;                         /* DESIGN.md rounded.lg = 12px */
 
-  /* 圖表色彩 */
-  --chart-1: hsl(12 76% 61%);
-  --chart-2: hsl(173 58% 39%);
-  --chart-3: hsl(197 37% 24%);
-  --chart-4: hsl(43 74% 66%);
-  --chart-5: hsl(27 87% 67%);
-}
-
-/* 暗色模式 - plan.md 建議的專業深色  */
-.dark {
-  --background: hsl(222 47% 7%);
-  --foreground: hsl(210 40% 98%);
-  --card: hsl(223 47% 10%);
-  --card-foreground: hsl(210 40% 98%);
-  --popover: hsl(223 47% 10%);
-  --popover-foreground: hsl(210 40% 98%);
-  --primary: hsl(239 84% 67%);
-  --primary-foreground: hsl(0 0% 100%);
-  --secondary: hsl(215 28% 17%);
-  --secondary-foreground: hsl(210 40% 98%);
-  --muted: hsl(215 28% 17%);
-  --muted-foreground: hsl(217 19% 62%);
-  --accent: hsl(215 28% 17%);
-  --accent-foreground: hsl(210 40% 98%);
-  --destructive: hsl(0 63% 31%);
-  --destructive-foreground: hsl(210 40% 98%);
-  --success: hsl(142 71% 45%);
-  --success-foreground: hsl(0 0% 100%);
-  --warning: hsl(38 92% 55%);
-  --warning-foreground: hsl(224 71% 4%);
-  --info: hsl(217 91% 60%);
-  --info-foreground: hsl(0 0% 100%);
-  --border: hsl(215 28% 17%);
-  --input: hsl(215 28% 17%);
-  --ring: hsl(239 84% 67%);
-
-  /* 面板專用 - 深色面板 */
-  --panel: hsl(220 33% 11%);
-  --panel-foreground: hsl(210 40% 98%);
-  --panel-border: hsl(215 20% 20%);
+  /* 面板：左側 control-panel 使用 surface-card cream */
+  --panel: hsl(40 28% 90%);
+  --panel-foreground: hsl(60 4% 8%);
+  --panel-border: hsl(38 25% 86%);
 
   /* Sidebar */
-  --sidebar-background: hsl(223 47% 10%);
-  --sidebar-foreground: hsl(210 40% 98%);
-  --sidebar-primary: hsl(239 84% 67%);
+  --sidebar-background: hsl(40 28% 90%);
+  --sidebar-foreground: hsl(60 4% 8%);
+  --sidebar-primary: hsl(15 53% 58%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(215 28% 17%);
-  --sidebar-accent-foreground: hsl(210 40% 98%);
-  --sidebar-border: hsl(215 28% 17%);
-  --sidebar-ring: hsl(239 84% 67%);
+  --sidebar-accent: hsl(38 25% 86%);
+  --sidebar-accent-foreground: hsl(60 4% 8%);
+  --sidebar-border: hsl(38 25% 88%);
+  --sidebar-ring: hsl(15 53% 58%);
 
-  /* 暗色模式圖表色彩 */
-  --chart-1: hsl(220 70% 50%);
-  --chart-2: hsl(160 60% 45%);
-  --chart-3: hsl(30 80% 55%);
-  --chart-4: hsl(280 65% 60%);
-  --chart-5: hsl(340 75% 55%);
+  /* Anthropic 系列圖表色 — 珊瑚 / 琥珀 / 茶綠 / 海軍 / 深奶油 */
+  --chart-1: hsl(15 53% 58%);
+  --chart-2: hsl(31 72% 63%);
+  --chart-3: hsl(168 35% 55%);
+  --chart-4: hsl(48 6% 9%);
+  --chart-5: hsl(38 25% 75%);
+
+  /* DESIGN.md 自訂語彙：暗色產品介面表面 */
+  --surface-dark: hsl(40 7% 9%);            /* #181715 */
+  --surface-dark-elevated: hsl(36 6% 13%);  /* #252320 */
+  --surface-dark-soft: hsl(40 7% 12%);      /* #1f1e1b */
+  --on-dark: hsl(48 36% 97%);
+  --on-dark-soft: hsl(45 7% 61%);
+  --primary-active: hsl(15 47% 45%);        /* coral active (#a9583e) */
 }
 
-/* Tailwind 對映 */
+/* ===== 暗色模式：反轉至 surface-dark 為底 ===== */
+.dark {
+  --background: hsl(40 7% 9%);
+  --foreground: hsl(48 36% 97%);
+  --card: hsl(40 7% 12%);
+  --card-foreground: hsl(48 36% 97%);
+  --popover: hsl(40 7% 9%);
+  --popover-foreground: hsl(48 36% 97%);
+  --primary: hsl(15 53% 58%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(36 6% 13%);
+  --secondary-foreground: hsl(48 36% 97%);
+  --muted: hsl(36 6% 13%);
+  --muted-foreground: hsl(45 7% 61%);
+  --accent: hsl(36 6% 13%);
+  --accent-foreground: hsl(48 36% 97%);
+  --destructive: hsl(0 53% 53%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --success: hsl(135 39% 55%);
+  --success-foreground: hsl(0 0% 100%);
+  --warning: hsl(45 86% 56%);
+  --warning-foreground: hsl(40 7% 9%);
+  --info: hsl(168 35% 55%);
+  --info-foreground: hsl(0 0% 100%);
+  --border: hsl(36 6% 16%);
+  --input: hsl(36 6% 16%);
+  --ring: hsl(15 53% 58%);
+
+  --panel: hsl(40 7% 12%);
+  --panel-foreground: hsl(48 36% 97%);
+  --panel-border: hsl(36 6% 18%);
+
+  --sidebar-background: hsl(40 7% 12%);
+  --sidebar-foreground: hsl(48 36% 97%);
+  --sidebar-primary: hsl(15 53% 58%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(36 6% 13%);
+  --sidebar-accent-foreground: hsl(48 36% 97%);
+  --sidebar-border: hsl(36 6% 16%);
+  --sidebar-ring: hsl(15 53% 58%);
+
+  --chart-1: hsl(15 53% 58%);
+  --chart-2: hsl(31 72% 63%);
+  --chart-3: hsl(168 35% 55%);
+  --chart-4: hsl(48 36% 80%);
+  --chart-5: hsl(38 18% 55%);
+
+  --surface-dark: hsl(40 7% 5%);
+  --surface-dark-elevated: hsl(36 6% 10%);
+  --surface-dark-soft: hsl(40 7% 8%);
+  --on-dark: hsl(48 36% 97%);
+  --on-dark-soft: hsl(45 7% 61%);
+  --primary-active: hsl(15 47% 45%);
+}
+
+/* ===== Tailwind v4 token 對映 ===== */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -153,30 +179,40 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* 面板 Token */
   --color-panel: var(--panel);
   --color-panel-foreground: var(--panel-foreground);
   --color-panel-border: var(--panel-border);
 
-  /* 圓角 Token */
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  /* DESIGN.md 自訂深色表面色 */
+  --color-surface-dark: var(--surface-dark);
+  --color-surface-dark-elevated: var(--surface-dark-elevated);
+  --color-surface-dark-soft: var(--surface-dark-soft);
+  --color-on-dark: var(--on-dark);
+  --color-on-dark-soft: var(--on-dark-soft);
+  --color-primary-active: var(--primary-active);
 
-  /* 字型 */
+  /* 圓角階層 — 對映 DESIGN.md rounded scale */
+  --radius-sm: 0.375rem;                     /* rounded.sm = 6px */
+  --radius-md: 0.5rem;                       /* rounded.md = 8px */
+  --radius-lg: var(--radius);                /* rounded.lg = 12px */
+  --radius-xl: 1rem;                         /* rounded.xl = 16px */
+
+  /* 字型族：襯線顯示用 / 無襯線內文 / 等寬 */
+  --font-serif:
+    "Cormorant Garamond", "Tiempos Headline", "Noto Serif TC",
+    "EB Garamond", "Times New Roman", Georgia, serif;
+
   --font-sans:
-    "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Noto Sans TC",
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-    "Noto Color Emoji";
+    "Inter", "Söhne", "Noto Sans TC", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji";
 
   --font-mono:
     "JetBrains Mono", "SF Mono", ui-monospace, "Cascadia Code",
-    "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    Menlo, Consolas, monospace;
 }
 
-/* 基礎樣式 */
+/* ===== 基礎樣式 ===== */
 @layer base {
   * {
     border-color: var(--border);
@@ -195,6 +231,13 @@
     -moz-osx-font-smoothing: grayscale;
     overflow: hidden;
   }
+
+  /* 顯示型襯線標題：套用於明確類別 */
+  .font-display {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
 }
 
 /* ===== 工作站佈局 ===== */
@@ -212,20 +255,20 @@
   min-height: 0;
 }
 
-/* 控制面板 */
+/* 控制面板：左側 surface-card cream，作為編輯式側欄 */
 .control-panel {
   overflow-y: auto;
   border-right: 1px solid var(--panel-border);
   background: var(--panel);
 }
 
-/* 結果區域 */
+/* 結果區域：右側 canvas，文字、結果在此呼吸 */
 .result-area {
   overflow-y: auto;
   background: var(--background);
 }
 
-/* ===== 響應式：行動裝置改為上下堆疊 ===== */
+/* ===== 響應式 ===== */
 @media (max-width: 768px) {
   .workstation-main {
     grid-template-columns: 1fr;
@@ -258,99 +301,47 @@
 }
 
 @keyframes collapsible-open {
-  from {
-    height: 0;
-    opacity: 0;
-  }
-  to {
-    height: var(--radix-collapsible-content-height);
-    opacity: 1;
-  }
+  from { height: 0; opacity: 0; }
+  to { height: var(--radix-collapsible-content-height); opacity: 1; }
 }
 
 @keyframes collapsible-close {
-  from {
-    height: var(--radix-collapsible-content-height);
-    opacity: 1;
-  }
-  to {
-    height: 0;
-    opacity: 0;
-  }
+  from { height: var(--radix-collapsible-content-height); opacity: 1; }
+  to { height: 0; opacity: 0; }
 }
 
-/* ===== 自訂微動畫 ===== */
+/* ===== 微動畫 ===== */
 @keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes pulse-dot {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 @keyframes spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 0.3s ease-out both;
-}
+.animate-fade-in-up { animation: fade-in-up 0.3s ease-out both; }
+.animate-pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+.animate-shimmer { background-size: 200% 100%; animation: shimmer 2s linear infinite; }
+.animate-spin-slow { animation: spin-slow 3s linear infinite; }
 
-.animate-pulse-dot {
-  animation: pulse-dot 2s ease-in-out infinite;
-}
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
 
-.animate-shimmer {
-  background-size: 200% 100%;
-  animation: shimmer 2s linear infinite;
-}
-
-.animate-spin-slow {
-  animation: spin-slow 3s linear infinite;
-}
-
-/* 交錯動畫延遲 */
-.stagger-1 {
-  animation-delay: 0.05s;
-}
-.stagger-2 {
-  animation-delay: 0.1s;
-}
-.stagger-3 {
-  animation-delay: 0.15s;
-}
-.stagger-4 {
-  animation-delay: 0.2s;
-}
-
-/* ===== 自訂捲軸樣式 ===== */
+/* ===== 自訂捲軸 ===== */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -370,8 +361,33 @@
   opacity: 0.4;
 }
 
-/* ===== 拖曳區域強調 ===== */
+/* ===== 拖曳區域強調：使用 coral primary 高亮 ===== */
 .drop-zone-active {
   border-color: var(--primary) !important;
   background: hsl(from var(--primary) h s l / 0.08) !important;
+}
+
+/* ===== Anthropic 風 spike-mark wordmark ===== */
+.spike-mark {
+  display: inline-block;
+  width: 0.7em;
+  height: 0.7em;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.spike-mark::before,
+.spike-mark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+}
+
+.spike-mark::before {
+  clip-path: polygon(45% 0, 55% 0, 55% 100%, 45% 100%);
+}
+
+.spike-mark::after {
+  clip-path: polygon(0 45%, 100% 45%, 100% 55%, 0 55%);
 }

@@ -107,7 +107,7 @@ export function ResultArea({
     return (
         <main className="result-area flex flex-col">
             {/* ===== 上方：生成控制列 ===== */}
-            <div className="flex items-center justify-between px-5 py-3 border-b border-border/50 bg-panel/30 shrink-0">
+            <div className="flex items-center justify-between px-6 py-3 border-b border-border bg-background shrink-0">
                 <div className="flex items-center gap-3">
                     {/* 狀態圓點 */}
                     <span className={`w-2 h-2 rounded-full ${statusConfig.dot}`} />
@@ -137,11 +137,11 @@ export function ResultArea({
                             <Copy className="w-3 h-3" />
                         </Button>
                     )}
-                    {/* 生成按鈕（主要 CTA） */}
+                    {/* 生成按鈕（主要 CTA — DESIGN.md button-primary：coral fill、rounded-md、StyreneB 14px/500） */}
                     <Button
                         id="generateButton"
                         size="sm"
-                        className="h-8 px-5 text-xs gap-1.5 rounded-lg bg-primary hover:bg-primary/90 shadow-md shadow-primary/20 transition-all duration-200 disabled:opacity-40 disabled:shadow-none"
+                        className="h-10 px-5 text-sm gap-2 rounded-md bg-primary text-primary-foreground hover:bg-primary-active font-medium transition-colors duration-150 disabled:opacity-40"
                         disabled={!canGenerate}
                         onClick={onGenerate}
                     >
@@ -163,15 +163,15 @@ export function ResultArea({
             {/* ===== 中間：結果展示區 ===== */}
             <div className="flex-1 overflow-y-auto p-5">
                 <div className="max-w-4xl mx-auto space-y-6">
-                    {/* 圖片展示 */}
+                    {/* 圖片展示 — DESIGN.md product-mockup-card-dark：surface-dark 包覆預覽 */}
                     {generationState.resultImageUrl ? (
                         <div className="space-y-3 animate-fade-in-up">
-                            {/* 影像預覽 */}
-                            <div className="relative rounded-xl overflow-hidden border border-border/30 bg-card/20 group">
+                            {/* 影像預覽：深海軍藍卡片承載產品結果 */}
+                            <div className="relative rounded-xl overflow-hidden bg-surface-dark p-3 group">
                                 <img
                                     src={generationState.resultImageUrl}
                                     alt="AI 生成影像"
-                                    className="w-full max-h-[calc(100vh-280px)] object-contain cursor-pointer"
+                                    className="w-full max-h-[calc(100vh-280px)] object-contain cursor-pointer rounded-lg"
                                     onClick={handleFullscreen}
                                 />
                                 {/* 懸停操作列 */}
@@ -209,25 +209,28 @@ export function ResultArea({
                             </div>
                         </div>
                     ) : (
-                        <div className="rounded-xl border border-dashed border-border/20 bg-card/5 flex flex-col items-center justify-center min-h-[300px] text-center">
+                        // 空白狀態：編輯式 hero-band — 襯線標題 + 副標、cream canvas
+                        <div className="rounded-xl border border-border bg-card flex flex-col items-center justify-center min-h-[360px] text-center px-8 py-12">
                             {isGenerating ? (
-                                <div className="space-y-4">
+                                <div className="space-y-5">
                                     <div className="w-12 h-12 rounded-full border-2 border-primary/30 border-t-primary animate-spin mx-auto" />
+                                    <p className="font-display text-2xl text-foreground tracking-tight">
+                                        正在繪製您的想像…
+                                    </p>
                                     <p className="text-sm text-muted-foreground">
-                                        影像生成中，請稍候…
+                                        模型運算需要一些時間，請稍候片刻
                                     </p>
                                 </div>
                             ) : (
                                 <>
-                                    <ImageIcon className="w-16 h-16 text-muted-foreground/10 mb-4" />
-                                    <p className="text-sm text-muted-foreground/30">
-                                        生成的影像將顯示在這裡
+                                    <ImageIcon className="w-12 h-12 text-muted-foreground/40 mb-5" />
+                                    <h2 className="font-display text-3xl md:text-4xl text-foreground tracking-tight mb-3">
+                                        將文字化為畫面
+                                    </h2>
+                                    <p className="text-sm text-muted-foreground max-w-md">
+                                        在左側輸入您的描述，選擇風格與輸出設定，
+                                        生成的影像將在這片畫布上呈現。
                                     </p>
-                                    {!prompt.trim() && (
-                                        <p className="text-xs text-muted-foreground/20 mt-2">
-                                            請先在左側輸入畫面描述
-                                        </p>
-                                    )}
                                 </>
                             )}
                         </div>
@@ -261,12 +264,12 @@ export function ResultArea({
                             <Separator className="opacity-10" />
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <History className="w-4 h-4 text-muted-foreground/50" />
-                                        <h3 className="text-xs font-medium text-muted-foreground">
+                                    <div className="flex items-center gap-3">
+                                        <History className="w-4 h-4 text-muted-foreground" />
+                                        <h3 className="font-display text-xl text-foreground tracking-tight">
                                             歷史紀錄
                                         </h3>
-                                        <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted/50 text-muted-foreground font-mono">
+                                        <span className="text-[11px] px-2 py-0.5 rounded-full bg-card text-muted-foreground font-medium">
                                             {history.length}
                                         </span>
                                     </div>
@@ -285,7 +288,7 @@ export function ResultArea({
                                     {history.map((item) => (
                                         <div
                                             key={item.id}
-                                            className="group relative rounded-lg border border-border/30 bg-card/20 overflow-hidden hover:border-primary/20 transition-all duration-150"
+                                            className="group relative rounded-lg border border-border bg-card overflow-hidden hover:border-primary/40 transition-all duration-150"
                                         >
                                             {/* 縮圖 */}
                                             <div className="relative aspect-[4/3] bg-muted/20">
@@ -361,10 +364,10 @@ export function ResultArea({
                 </div>
             </div>
 
-            {/* ===== 底部狀態列 ===== */}
-            <div className="flex items-center justify-between px-4 py-1.5 border-t border-border/30 bg-panel/20 text-[10px] text-muted-foreground/40 shrink-0">
+            {/* ===== 底部狀態列 — DESIGN.md footer caption 風格 ===== */}
+            <div className="flex items-center justify-between px-6 py-2 border-t border-border bg-background text-[11px] text-muted-foreground shrink-0">
                 <span>© 2026 映像製作所 · 由 Claude / Gemini 設計開發</span>
-                <span className="font-mono">v0.2.0</span>
+                <span className="font-mono uppercase tracking-[0.12em]">v0.2.0</span>
             </div>
         </main>
     )
