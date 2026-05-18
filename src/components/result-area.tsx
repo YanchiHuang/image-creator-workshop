@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
 import {
     Download,
     Maximize2,
@@ -11,12 +11,16 @@ import {
     History,
     Trash2,
     RotateCcw,
+    Link,
+    ClipboardPaste,
 } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { zhTW } from 'date-fns/locale'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import type { GenerationState, HistoryItem } from '@/lib/store'
+import type { ConnectionType } from '@/lib/constants'
 
 interface ResultAreaProps {
     // 生成控制
@@ -24,6 +28,9 @@ interface ResultAreaProps {
     prompt: string
     onGenerate: () => void
     onUpdateElapsedTime: (time: number) => void
+    connectionType: ConnectionType
+    onManualImageUrl?: (url: string) => void
+    onPasteImage?: () => void
     // 歷史紀錄
     history: HistoryItem[]
     onDeleteHistoryItem: (id: string) => void
@@ -36,6 +43,9 @@ export function ResultArea({
     prompt,
     onGenerate,
     onUpdateElapsedTime,
+    connectionType,
+    onManualImageUrl,
+    onPasteImage,
     history,
     onDeleteHistoryItem,
     onClearHistory,
@@ -43,6 +53,16 @@ export function ResultArea({
 }: ResultAreaProps) {
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
     const startTimeRef = useRef<number>(0)
+    const [manualUrl, setManualUrl] = useState('')
+
+    const isBrowserExtension = connectionType === 'chatgpt' || connectionType === 'gemini'
+
+    const handleManualSubmit = useCallback(() => {
+        const trimmed = manualUrl.trim()
+        if (!trimmed || !onManualImageUrl) return
+        onManualImageUrl(trimmed)
+        setManualUrl('')
+    }, [manualUrl, onManualImageUrl])
 
     // 計時器
     useEffect(() => {
@@ -137,6 +157,19 @@ export function ResultArea({
                             <Copy className="w-3 h-3" />
                         </Button>
                     )}
+                    {/* 剪貼簿貼上圖片按鈕 — 瀏覽器模式或已有結果時顯示 */}
+                    {onPasteImage && !isGenerating && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-8 px-3 text-xs gap-1.5 rounded-md border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/40"
+                            onClick={onPasteImage}
+                            title="從剪貼簿貼上圖片（在 ChatGPT 複製圖片後點此）"
+                        >
+                            <ClipboardPaste className="w-3.5 h-3.5" />
+                            貼上圖片
+                        </Button>
+                    )}
                     {/* 生成按鈕（主要 CTA — DESIGN.md button-primary：coral fill、rounded-md、StyreneB 14px/500） */}
                     <Button
                         id="generateButton"
@@ -212,14 +245,48 @@ export function ResultArea({
                         // 空白狀態：編輯式 hero-band — 襯線標題 + 副標、cream canvas
                         <div className="rounded-xl border border-border bg-card flex flex-col items-center justify-center min-h-[360px] text-center px-8 py-12">
                             {isGenerating ? (
-                                <div className="space-y-5">
+                                <div className="space-y-5 w-full max-w-md">
                                     <div className="w-12 h-12 rounded-full border-2 border-primary/30 border-t-primary animate-spin mx-auto" />
-                                    <p className="font-display text-2xl text-foreground tracking-tight">
-                                        正在繪製您的想像…
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        模型運算需要一些時間，請稍候片刻
-                                    </p>
+                                    {isBrowserExtension ? (
+                                        <>
+                                            <p className="font-display text-2xl text-foreground tracking-tight">
+                                                已在新分頁開啟
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                圖片生成後，若擴充功能支援自動回傳，結果將自動顯示於此。
+                                                <br />否則請從瀏覽器複製圖片網址後貼到下方。
+                                            </p>
+                                            {/* 手動貼上 URL 備案 */}
+                                            <div className="flex gap-2 mt-2">
+                                                <Input
+                                                    placeholder="貼上圖片 URL…"
+                                                    value={manualUrl}
+                                                    onChange={(e) => setManualUrl(e.target.value)}
+                                                    onKeyDown={(e) => e.key === 'Enter' && handleManualSubmit()}
+                                                    className="h-8 text-xs rounded-md border-border/50 bg-card/50"
+                                                />
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline"
+                                                    className="h-8 px-3 text-xs shrink-0 gap-1"
+                                                    disabled={!manualUrl.trim()}
+                                                    onClick={handleManualSubmit}
+                                                >
+                                                    <Link className="w-3 h-3" />
+                                                    確認
+                                                </Button>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className="font-display text-2xl text-foreground tracking-tight">
+                                                正在繪製您的想像…
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                模型運算需要一些時間，請稍候片刻
+                                            </p>
+                                        </>
+                                    )}
                                 </div>
                             ) : (
                                 <>

@@ -233,6 +233,15 @@ export function useGenerationState() {
         }))
     }, [])
 
+    // 直接更新圖片 URL（不改變其他狀態，用於擴充功能回傳 / 剪貼簿貼上）
+    const setResultImage = useCallback((imageUrl: string) => {
+        setState(prev => ({
+            ...prev,
+            status: 'done',
+            resultImageUrl: imageUrl,
+        }))
+    }, [])
+
     const failGeneration = useCallback((error: string) => {
         setState(prev => ({
             ...prev,
@@ -260,6 +269,7 @@ export function useGenerationState() {
         completeGeneration,
         failGeneration,
         updateElapsedTime,
+        setResultImage,
         reset,
     }
 }

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
 import { HeaderBar } from '@/components/header-bar'
 import { ControlPanel } from '@/components/control-panel'
 import { ResultArea } from '@/components/result-area'
@@ -15,6 +15,7 @@ import { PROMPT_TEMPLATES } from '@/lib/constants'
 import type { ConnectionType } from '@/lib/constants'
 import { ImageGenerator } from '@/lib/services/image-generator'
 import { APIError } from '@/lib/services/types'
+import { manualResolve } from '@/lib/services/browser-extension'
 
 function App() {
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -46,11 +47,67 @@ function App() {
     completeGeneration,
     failGeneration,
     updateElapsedTime,
+    setResultImage,
   } = useGenerationState()
 
   // 歷史紀錄
   const { history, addToHistory, clearHistory, deleteHistoryItem } =
     useHistoryState()
+
+  // ===== postMessage 監聽器：接收瀏覽器擴充功能回傳的圖片 =====
+  useEffect(() => {
+    const allowedOrigins = ['https://chatgpt.com', 'https://gemini.google.com']
+
+    const handleExtensionMessage = (event: MessageEvent) => {
+      // 安全性驗證：只接受允許來源
+      if (!allowedOrigins.includes(event.origin)) return
+
+      const data = event.data
+      if (!data || typeof data !== 'object') return
+
+      const { type, imageUrl, imageBase64 } = data as {
+        type?: string
+        imageUrl?: string
+        imageBase64?: string
+      }
+
+      // 支援多種訊息格式以相容不同版本的擴充功能
+      if (type !== 'IMAGE_RESULT' && type !== 'CHATGPT_IMAGE_RESULT') return
+
+      const finalUrl = imageUrl || imageBase64
+      if (!finalUrl || typeof finalUrl !== 'string') return
+
+      // 更新顯示圖片（不重設計時器 / 歷史紀錄）
+      setResultImage(finalUrl)
+    }
+
+    window.addEventListener('message', handleExtensionMessage)
+    return () => window.removeEventListener('message', handleExtensionMessage)
+  }, [setResultImage])
+
+  // ===== 剪貼簿貼上圖片 =====
+  const handlePasteImage = useCallback(async () => {
+    try {
+      if (!navigator.clipboard?.read) {
+        alert('您的瀏覽器不支援剪貼簿讀取，請改用「貼上圖片 URL」欄位。')
+        return
+      }
+      const items = await navigator.clipboard.read()
+      for (const item of items) {
+        const imageType = item.types.find((t) => t.startsWith('image/'))
+        if (imageType) {
+          const blob = await item.getType(imageType)
+          const url = URL.createObjectURL(blob)
+          setResultImage(url)
+          return
+        }
+      }
+      alert('剪貼簿中沒有找到圖片，請先在 ChatGPT / Gemini 右鍵「複製圖片」。')
+    } catch (err) {
+      console.error('讀取剪貼簿失敗:', err)
+      alert('無法讀取剪貼簿，請確認已授予「剪貼簿讀取」權限。')
+    }
+  }, [setResultImage])
 
   // 隨機範本
   const handleRandomTemplate = useCallback(() => {
@@ -162,6 +219,9 @@ function App() {
           prompt={prompt}
           onGenerate={handleGenerate}
           onUpdateElapsedTime={updateElapsedTime}
+          connectionType={appSettings.connectionType}
+          onManualImageUrl={manualResolve}
+          onPasteImage={handlePasteImage}
           history={history}
           onDeleteHistoryItem={deleteHistoryItem}
           onClearHistory={clearHistory}
